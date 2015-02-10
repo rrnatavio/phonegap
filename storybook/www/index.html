@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" />
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+        <title>Hello World</title>
+    </head>
+    <body style="background:url('img/storybook-bg.jpg');">
+		<div id="jplayer"></div>
+		<!-- Start of first page -->
+		<div data-role="page" id="foo">
+
+			<!--<div data-role="header">
+				<h1>Foo</h1>
+			</div> /header -->
+
+			<div role="main" class="ui-content">
+				<p>I'm first in the source order so I'm shown as the page.</p>
+				<p>View internal page called <a href="#bar">bar</a></p>
+			</div><!-- /content -->
+
+			<!--<div data-role="footer">
+				<h4>Page Footer</h4>
+			</div> /footer -->
+		</div><!-- /page -->
+		
+		<!-- Start of second page -->
+		<div data-role="page" id="bar" data-next="3rd">
+
+			<!--<div data-role="header">
+				<h1>Bar</h1>
+			</div> /header -->
+
+			<div role="main" class="ui-content">
+				<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>
+				<p><a href="#foo">Back to foo</a></p>
+			</div><!-- /content -->
+
+			<!--<div data-role="footer">
+				<h4>Page Footer</h4>
+			</div> /footer -->
+		</div><!-- /page -->
+		
+		<!-- Start of 3d page -->
+		<div data-role="page" id="3rd" data-prev="bar" data-next="4th">
+			<div role="main" class="ui-content">
+				<p>I'm the 3rd in the source order so I'm hidden when the page loads.</p>
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		<!-- Start of 4th page -->
+		<div data-role="page" id="4th" data-prev="3rd" data-next="5th">
+			<div role="main" class="ui-content">
+				<p>I'm the 4th in the source order so I'm hidden when the page loads.</p>
+			</div><!-- /content -->
+		</div><!-- /page -->
+		
+		<!-- Start of 5th page -->
+		<div data-role="page" id="5th" data-prev="4th" >
+			<div role="main" class="ui-content">
+				<p>I'm the 5th in the source order so I'm hidden when the page loads.</p>
+			</div><!-- /content -->
+		</div><!-- /page -->
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script>
+			$(function(){
+				//$('#jplayer').jPlayer('setMedia', {mp3:'http://www.jplayer.org/audio/mp3/Miaow-10-Thin-ice.mp3'});
+				//$('#jplayer').jPlayer('play');
+				//var media = new Media('http://www.jplayer.org/audio/mp3/Miaow-10-Thin-ice.mp3');
+				//media.play();
+				playAudio('http://www.jplayer.org/audio/mp3/Miaow-10-Thin-ice.mp3');
+
+			});
+			function playAudio(src) {
+
+				// HTML5 Audio
+				if (typeof Audio != "undefined") { 
+					new Audio(src).play() ;
+
+				// Phonegap media
+				} else if (typeof device != "undefined") {
+
+					// Android needs the search path explicitly specified
+					if (device.platform == 'Android') {
+						//src = '/android_asset/www/' + src;
+					}
+
+					var mediaRes = new Media(src,
+						function onSuccess() {
+							// release the media resource once finished playing
+							mediaRes.release();
+						},
+						function onError(e){
+							alert("error playing sound: " + JSON.stringify(e));
+						});
+					mediaRes.play();
+
+				} else {
+					console.log("no sound API to play: " + src);
+				}
+			 }
+			/*$(function(){
+				$(document).on('swiperight', '.ui-page', function(event) {
+					var prev = $(this).jqmData('prev');
+					if (prev && (event.target === $(this)[0] )) {
+						navprev(prev);
+					}
+				});
+				$(document).on('swipeleft', '.ui-page', function(event) {
+					var next = $(this).jqmData('next');
+					if (next && (event.target === $(this)[0] )) {
+						navnext(next);
+					}
+				});
+			});
+			
+			function navprev(prev) {
+				$(':mobile-pagecontainer').pagecontainer('change', prev + '.html', {
+					transition:'slide',
+					reverse:true
+				});
+			}
+			
+			function navnext(next) {
+				$(':mobile-pagecontainer').pagecontainer('change', next + '.html', {
+					transition:'slide'
+				});
+			}*/
+		</script>
+    </body>
+</html>
